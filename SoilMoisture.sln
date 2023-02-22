@@ -1,13 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.31624.102
+# Visual Studio Version 17
+VisualStudioVersion = 17.4.33122.133
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SoilMoisture.Device", "SoilMoisture.Device\SoilMoisture.Device.csproj", "{C64C15DA-53F7-48AD-9C1B-B2EE33A7605F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SoilMositure.Functions", "SoilMositure.Functions\SoilMositure.Functions.csproj", "{AE42B81D-8E61-46E0-A517-32DBC70FCEED}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SoilMositure.Functions", "SoilMositure.Functions\SoilMositure.Functions.csproj", "{AE42B81D-8E61-46E0-A517-32DBC70FCEED}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SoilMoisture.Models", "SoilMoisture.Models\SoilMoisture.Models.csproj", "{D966288D-7897-46EB-9DE2-0AE061C1A97A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SoilMoisture.Models", "SoilMoisture.Models\SoilMoisture.Models.csproj", "{D966288D-7897-46EB-9DE2-0AE061C1A97A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

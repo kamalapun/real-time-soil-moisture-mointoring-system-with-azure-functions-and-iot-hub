@@ -9,6 +9,6 @@ namespace SoilMoisture.Models
         public string deviceId { get; set; }
         public DateTime recordedAt { get; set; }
         public double moistureLevel { get; set; }
-        
+
     }
 }

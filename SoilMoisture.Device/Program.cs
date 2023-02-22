@@ -10,7 +10,7 @@ namespace SoilMoisture.Device
     class Program
     {
         private static DeviceClient deviceClient;
-        private readonly static string connectionString = "";
+        private readonly static string connectionString = "HostName=Soilmoisture-iot.azure-devices.net;DeviceId=dev1;SharedAccessKey=j49ZU+2A9iJzgM50zXn65zJr39VnHJnuU2WA24NnrDM=";
         static void Main(string[] args)
         {
             Console.WriteLine("Sending Messages");
@@ -25,7 +25,7 @@ namespace SoilMoisture.Device
                 result = SendMessages(deviceClient);
                 if (result)
                 {
-                    Console.WriteLine($"Message {i} delivered");
+                    Console.WriteLine($"Message {i + 1} delivered");
                 }
                 else
                 {
@@ -44,8 +44,8 @@ namespace SoilMoisture.Device
         {
             var sensorData = new SoilMoistureModel()
             {
-                deviceId = "ashirwad-simulator",
-                moistureLevel = GetRandomNumberInRange(100, 200),
+                deviceId = "dev1",
+                moistureLevel = GetRandomNumberInRange(300, 1500),
                 recordedAt = DateTime.Now
             };
             var jsonData = JsonSerializer.Serialize(sensorData);

@@ -1,8 +1,6 @@
 using IoTHubTrigger = Microsoft.Azure.WebJobs.EventHubTriggerAttribute;
 
 using Microsoft.Azure.WebJobs;
-using Microsoft.Azure.WebJobs.Host;
-using Microsoft.Azure.EventHubs;
 using System.Text;
 using System.Net.Http;
 using Microsoft.Extensions.Logging;
@@ -12,6 +10,8 @@ using System;
 using SendGrid;
 using SendGrid.Helpers.Mail;
 using System.Threading.Tasks;
+using Azure.Messaging.EventHubs;
+using Microsoft.Azure.Cosmos.Core;
 
 namespace SoilMositure.Functions
 {
@@ -20,27 +20,28 @@ namespace SoilMositure.Functions
         private static HttpClient client = new HttpClient();
 
         [FunctionName("IoTHubProcessor")]
-        public static void Run([IoTHubTrigger("messages/events", Connection = "iothubConn")]EventData message,
+        public static void Run([IoTHubTrigger("soilmoisture-iot", Connection = "iothubConn")]EventData message,
             [CosmosDB(
-                databaseName:"my-iot-db",
-                collectionName:"dev-data-store",
-                ConnectionStringSetting ="dbConn"
-            )] IAsyncCollector<dynamic> documentsOut, 
+                databaseName:"my-iot-cdb",
+                containerName:"dev-data-store",
+                Connection ="dbConn"
+            )] IAsyncCollector<dynamic> documentsOut,
             ILogger log)
         {
-            //log.LogInformation($"C# IoT Hub trigger function processed a message: {Encoding.UTF8.GetString(message.Body.Array)}");
+           // log.LogInformation($"C# IoT Hub trigger function processed a message: {Encoding.UTF8.GetString(message.Body.ToArray())}");
             
-            SoilMoistureModel data = JsonConvert.DeserializeObject<SoilMoistureModel>(Encoding.UTF8.GetString(message.Body.Array));
-            
-            log.LogInformation($"Device Name - {data.deviceId} \t Moisture Level - {data.moistureLevel} \t Recorded at - {data.recordedAt.ToLongTimeString()}");
-          
+            // SoilMoistureModel data = JsonConvert.DeserializeObject<SoilMoistureModel>(Encoding.UTF8.GetString(message.Body.Array));
+          SoilMoistureModel data = JsonConvert.DeserializeObject<SoilMoistureModel>(Encoding.UTF8.GetString(message.Body.ToArray()));
 
-            if(data.moistureLevel < 400)
+            log.LogInformation($"Device Name - {data.deviceId} \t Moisture Level - {data.moistureLevel} \t Recorded at - {data.recordedAt.ToLongTimeString()}");
+
+
+            if (data.moistureLevel > 750)
             {
                 SendEmailAsync().Wait();
             }
 
-            
+
             documentsOut.AddAsync(
                 new
                 {
@@ -57,9 +58,9 @@ namespace SoilMositure.Functions
 
             var apiKey = Environment.GetEnvironmentVariable("sendGridApiKey");
             var client = new SendGridClient(apiKey);
-            var from = new EmailAddress("ashirwadsatapathi.aim@gmail.com", "Admin");
+            var from = new EmailAddress("kamalapun22@outlook.com", "Admin");
             var subject = Environment.GetEnvironmentVariable("emailSubject");
-            var to = new EmailAddress(Environment.GetEnvironmentVariable("recipientEmail"), "Ashirwad Satapathi");
+            var to = new EmailAddress(Environment.GetEnvironmentVariable("recipientEmail"), "Kamala Pun");
             var plainTextContent = Environment.GetEnvironmentVariable("emailMessage");
             var htmlContent = "";
             var msg = MailHelper.CreateSingleEmail(from, to, subject, plainTextContent, htmlContent);
